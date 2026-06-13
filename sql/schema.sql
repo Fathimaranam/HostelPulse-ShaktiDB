@@ -4,7 +4,8 @@ CREATE TABLE students (
     hostel VARCHAR(50) NOT NULL,
     room_no VARCHAR(20),
     phone VARCHAR(15)
-);CREATE TABLE leave_requests (
+);
+CREATE TABLE leave_requests (
     leave_id SERIAL PRIMARY KEY,
     student_id INT REFERENCES students(student_id),
     leave_date DATE NOT NULL,
