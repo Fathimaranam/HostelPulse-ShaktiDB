@@ -1,7 +1,7 @@
 import psycopg2
 
-try:
-    conn = psycopg2.connect(
+def connect_db():
+    return psycopg2.connect(
         dbname="hostelpulse",
         user="postgres",
         password="hostelpulse123",
@@ -9,20 +9,36 @@ try:
         port="5432"
     )
 
-    print("Connected to HostelPulse Database!")
-
+def view_students():
+    conn = connect_db()
     cur = conn.cursor()
 
     cur.execute("SELECT * FROM students")
 
     students = cur.fetchall()
 
-    print("\nStudents List:")
+    print("\n===== Students =====")
+
     for student in students:
         print(student)
 
     cur.close()
     conn.close()
 
-except Exception as e:
-    print("Error:", e)
+while True:
+
+    print("\n===== HostelPulse =====")
+    print("1. View Students")
+    print("2. Exit")
+
+    choice = input("Enter choice: ")
+
+    if choice == "1":
+        view_students()
+
+    elif choice == "2":
+        print("Goodbye!")
+        break
+
+    else:
+        print("Invalid choice!")
