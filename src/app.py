@@ -151,6 +151,48 @@ def search_student():
     cur.close()
     conn.close()
 
+def dashboard_summary():
+    conn = connect_db()
+    cur = conn.cursor()
+
+    # Total students
+    cur.execute("SELECT COUNT(*) FROM students")
+    total_students = cur.fetchone()[0]
+
+    # Total leave requests
+    cur.execute("SELECT COUNT(*) FROM leave_requests")
+    total_leaves = cur.fetchone()[0]
+
+    # Pending leave requests
+    cur.execute("""
+        SELECT COUNT(*)
+        FROM leave_requests
+        WHERE status='Pending'
+    """)
+    pending_leaves = cur.fetchone()[0]
+
+    print("\n===== HostelPulse Dashboard =====")
+    print(f"Total Students: {total_students}")
+    print(f"Total Leave Requests: {total_leaves}")
+    print(f"Pending Leave Requests: {pending_leaves}")
+
+    print("\nOccupancy by Hostel:")
+
+    cur.execute("""
+        SELECT hostel, COUNT(*)
+        FROM students
+        GROUP BY hostel
+        ORDER BY hostel
+    """)
+
+    results = cur.fetchall()
+
+    for hostel, count in results:
+        print(f"{hostel}: {count}")
+
+    cur.close()
+    conn.close()
+
 while True:
 
     print("1. View Students")
@@ -159,8 +201,8 @@ while True:
     print("4. View Leave Requests")
     print("5. Occupancy Summary")
     print("6. Meal Preference Summary")
-    print("7. Search Student")
-    print("8. Exit")
+    print("8. Dashboard Summary")
+    print("9. Exit")
 
     choice = input("Enter choice: ")
 
@@ -186,6 +228,9 @@ while True:
         search_student()
     
     elif choice == "8":
+        dashboard_summary()
+    
+    elif choice == "9":
         print("Goodbye!")
         break
 
