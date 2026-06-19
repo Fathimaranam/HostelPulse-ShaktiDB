@@ -64,12 +64,34 @@ def apply_leave():
     cur.close()
     conn.close()
 
+def view_leave_requests():
+    conn = connect_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT leave_id, student_id,
+               leave_date, return_date, status
+        FROM leave_requests
+        ORDER BY leave_id
+    """)
+
+    requests = cur.fetchall()
+
+    print("\n===== Leave Requests =====")
+
+    for req in requests:
+        print(req)
+
+    cur.close()
+    conn.close()
+
 while True:
 
     print("1. View Students")
     print("2. Add Student")
     print("3. Apply Leave")
-    print("4. Exit")
+    print("4. View Leave Requests")
+    print("5. Exit")
 
     choice = input("Enter choice: ")
 
@@ -81,8 +103,11 @@ while True:
 
     elif choice == "3":
         apply_leave()
-
+    
     elif choice == "4":
+        view_leave_requests()
+    
+    elif choice == "5":
         print("Goodbye!")
         break
 
