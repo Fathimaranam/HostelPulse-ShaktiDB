@@ -44,12 +44,32 @@ def add_student():
     cur.close()
     conn.close()
 
+def apply_leave():
+    student_id = input("Enter Student ID: ")
+    leave_date = input("Enter Leave Date (YYYY-MM-DD): ")
+    return_date = input("Enter Return Date (YYYY-MM-DD): ")
+
+    conn = connect_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        INSERT INTO leave_requests(student_id, leave_date, return_date)
+        VALUES (%s, %s, %s)
+    """, (student_id, leave_date, return_date))
+
+    conn.commit()
+
+    print("Leave request submitted successfully!")
+
+    cur.close()
+    conn.close()
+
 while True:
 
-    print("\n===== HostelPulse =====")
     print("1. View Students")
     print("2. Add Student")
-    print("3. Exit")
+    print("3. Apply Leave")
+    print("4. Exit")
 
     choice = input("Enter choice: ")
 
@@ -60,8 +80,13 @@ while True:
         add_student()
 
     elif choice == "3":
+        apply_leave()
+
+    elif choice == "4":
         print("Goodbye!")
         break
 
     else:
         print("Invalid choice!")
+
+
