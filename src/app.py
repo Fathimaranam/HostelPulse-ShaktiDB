@@ -85,13 +85,35 @@ def view_leave_requests():
     cur.close()
     conn.close()
 
+def occupancy_summary():
+    conn = connect_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT hostel, COUNT(*)
+        FROM students
+        GROUP BY hostel
+        ORDER BY hostel
+    """)
+
+    results = cur.fetchall()
+
+    print("\n===== Occupancy Summary =====")
+
+    for hostel, count in results:
+        print(f"{hostel}: {count} students")
+
+    cur.close()
+    conn.close()
+
 while True:
 
     print("1. View Students")
     print("2. Add Student")
     print("3. Apply Leave")
     print("4. View Leave Requests")
-    print("5. Exit")
+    print("5. Occupancy Summary")
+    print("6. Exit")
 
     choice = input("Enter choice: ")
 
@@ -106,8 +128,11 @@ while True:
     
     elif choice == "4":
         view_leave_requests()
-    
+
     elif choice == "5":
+        occupancy_summary()    
+
+    elif choice == "6":
         print("Goodbye!")
         break
 
