@@ -128,6 +128,29 @@ def meal_preference_summary():
     cur.close()
     conn.close()
 
+def search_student():
+    student_id = input("Enter Student ID: ")
+
+    conn = connect_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT *
+        FROM students
+        WHERE student_id = %s
+    """, (student_id,))
+
+    student = cur.fetchone()
+
+    if student:
+        print("\n===== Student Found =====")
+        print(student)
+    else:
+        print("Student not found!")
+
+    cur.close()
+    conn.close()
+
 while True:
 
     print("1. View Students")
@@ -136,7 +159,8 @@ while True:
     print("4. View Leave Requests")
     print("5. Occupancy Summary")
     print("6. Meal Preference Summary")
-    print("7. Exit")
+    print("7. Search Student")
+    print("8. Exit")
 
     choice = input("Enter choice: ")
 
@@ -159,6 +183,9 @@ while True:
         meal_preference_summary()
     
     elif choice == "7":
+        search_student()
+    
+    elif choice == "8":
         print("Goodbye!")
         break
 
