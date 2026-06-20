@@ -106,6 +106,28 @@ def occupancy_summary():
     cur.close()
     conn.close()
 
+def meal_preference_summary():
+    conn = connect_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT
+            SUM(CASE WHEN breakfast THEN 1 ELSE 0 END),
+            SUM(CASE WHEN lunch THEN 1 ELSE 0 END),
+            SUM(CASE WHEN dinner THEN 1 ELSE 0 END)
+        FROM meal_preferences
+    """)
+
+    result = cur.fetchone()
+
+    print("\n===== Meal Preference Summary =====")
+    print(f"Breakfast: {result[0]}")
+    print(f"Lunch: {result[1]}")
+    print(f"Dinner: {result[2]}")
+
+    cur.close()
+    conn.close()
+
 while True:
 
     print("1. View Students")
@@ -113,7 +135,8 @@ while True:
     print("3. Apply Leave")
     print("4. View Leave Requests")
     print("5. Occupancy Summary")
-    print("6. Exit")
+    print("6. Meal Preference Summary")
+    print("7. Exit")
 
     choice = input("Enter choice: ")
 
@@ -131,8 +154,11 @@ while True:
 
     elif choice == "5":
         occupancy_summary()    
-
+    
     elif choice == "6":
+        meal_preference_summary()
+    
+    elif choice == "7":
         print("Goodbye!")
         break
 
